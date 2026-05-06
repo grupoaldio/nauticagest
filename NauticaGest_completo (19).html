@@ -1,0 +1,1717 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NáuticaGest</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean:#0a3d5c;--ocean2:#1a6fa0;--ocean3:#2390d0;
+  --teal:#0d9488;--teal2:#14b8a6;--teal-light:#ccfbf1;
+  --coral:#e05a38;--coral-light:#fef3f0;
+  --gold:#d4a843;--gold-light:#fef9ec;
+  --indigo:#4f46e5;--indigo-light:#eef2ff;
+  --green:#16a34a;--green-light:#dcfce7;
+  --surface:#f0f4f8;--card:#fff;
+  --text:#0f172a;--text2:#475569;--text3:#94a3b8;
+  --border:rgba(15,23,42,0.09);
+  --shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.06);
+  --shadow-lg:0 8px 32px rgba(0,0,0,0.14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);font-size:14px}
+.layout{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:228px;min-width:228px;background:linear-gradient(180deg,#052840 0%,#031e30 100%);display:flex;flex-direction:column;overflow-y:auto}
+.logo{padding:24px 18px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
+.logo-icon{width:40px;height:40px;background:var(--teal2);border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:10px;box-shadow:0 4px 14px rgba(20,184,166,0.4)}
+.logo-name{font-family:'Playfair Display',serif;color:#fff;font-size:15px;font-weight:700}
+.logo-sub{color:rgba(255,255,255,0.35);font-size:9px;letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
+.nav-group{padding:14px 10px 6px}
+.nav-label{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.28);padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;cursor:pointer;margin-bottom:2px;color:rgba(255,255,255,0.5);font-size:12.5px;font-weight:500;transition:all .15s;border:1px solid transparent}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.85)}
+.nav-item.active{background:rgba(20,184,166,0.18);color:#fff;border-color:rgba(20,184,166,0.3)}
+.nav-item .ic{font-size:15px;width:18px;text-align:center}
+.nbadge{margin-left:auto;background:var(--teal2);color:#fff;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px;min-width:18px;text-align:center}
+.nbadge.r{background:var(--coral)}
+.sidebar-footer{margin-top:auto;padding:14px 10px;border-top:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;gap:5px}
+.sync-status{font-size:10px;text-align:center;color:#10b981;padding:3px 0}
+.sfbtn{width:100%;padding:8px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:5px}
+.sfbtn:hover{background:rgba(255,255,255,0.1);color:#fff}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:13px 24px;display:flex;align-items:center;gap:14px;box-shadow:0 1px 0 var(--border)}
+.topbar-title{font-family:'Playfair Display',serif;font-size:19px;color:var(--ocean)}
+.topbar-sub{font-size:11px;color:var(--text3);margin-top:1px}
+.topbar-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.topbar-date{font-size:11px;color:var(--text3)}
+.content{flex:1;overflow-y:auto;padding:20px 24px}
+
+/* VIEWS */
+.view{display:none;animation:fu .2s ease}
+.view.active{display:block}
+@keyframes fu{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* BUTTONS */
+.btn{padding:8px 15px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:var(--teal2);transform:translateY(-1px);box-shadow:0 4px 12px rgba(13,148,136,0.3)}
+.btn-ocean{background:var(--ocean);color:#fff}
+.btn-ocean:hover{background:var(--ocean2)}
+.btn-gold{background:var(--gold);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+.btn-sm{padding:4px 9px;font-size:10.5px;border-radius:6px}
+.btn-danger{background:transparent;border:1.5px solid var(--coral);color:var(--coral)}
+.btn-danger:hover{background:var(--coral-light)}
+
+/* CARDS */
+.card{background:var(--card);border-radius:13px;border:1px solid var(--border);box-shadow:var(--shadow);overflow:hidden}
+.card-header{padding:13px 17px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:12.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:7px}
+.card-body{padding:17px}
+
+/* METRICS */
+.metrics-row{display:grid;gap:13px;margin-bottom:16px}
+.mc4{grid-template-columns:repeat(4,1fr)}
+.mc3{grid-template-columns:repeat(3,1fr)}
+.metric-card{background:var(--card);border-radius:13px;padding:16px 18px;border:1px solid var(--border);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.metric-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.mc-teal::before{background:linear-gradient(90deg,var(--teal),var(--teal2))}
+.mc-ocean::before{background:linear-gradient(90deg,var(--ocean),var(--ocean3))}
+.mc-gold::before{background:linear-gradient(90deg,var(--gold),#f0c060)}
+.mc-coral::before{background:linear-gradient(90deg,var(--coral),#f07050)}
+.mc-indigo::before{background:linear-gradient(90deg,var(--indigo),#818cf8)}
+.mc-green::before{background:linear-gradient(90deg,var(--green),#4ade80)}
+.metric-icon{font-size:26px;margin-bottom:9px;display:block}
+.metric-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text3);margin-bottom:4px}
+.metric-value{font-family:'Playfair Display',serif;font-size:26px;color:var(--text);line-height:1}
+.metric-value.pos{color:var(--teal)}
+.metric-value.neg{color:var(--coral)}
+.metric-sub{font-size:10px;color:var(--text3);margin-top:5px}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px;margin-bottom:14px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead th{text-align:left;padding:9px 13px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--text3);background:#f8fafc;border-bottom:1px solid var(--border);white-space:nowrap}
+tbody td{padding:11px 13px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#f8fafc}
+.td-bold{font-weight:600;color:var(--text)}
+.td-mono{font-family:monospace;font-size:10.5px;color:var(--ocean);background:var(--indigo-light);padding:2px 6px;border-radius:4px}
+.money-pos{color:var(--teal);font-weight:700}
+.money-neg{color:var(--coral);font-weight:700}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:600}
+.b-green{background:var(--green-light);color:var(--green)}
+.b-blue{background:#dbeafe;color:#1d4ed8}
+.b-yellow{background:#fef3c7;color:#92400e}
+.b-red{background:#fee2e2;color:#b91c1c}
+.b-purple{background:#ede9fe;color:#6d28d9}
+.b-gray{background:#f1f5f9;color:var(--text2)}
+.b-teal{background:var(--teal-light);color:var(--teal)}
+.b-indigo{background:var(--indigo-light);color:var(--indigo)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,20,40,0.6);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px)}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:16px;width:660px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-lg);animation:mi .2s ease}
+@keyframes mi{from{opacity:0;transform:scale(0.97) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-header{padding:20px 22px 15px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--card);z-index:2;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--ocean)}
+.modal-close{background:#f1f5f9;border:none;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--text2);transition:all .15s}
+.modal-close:hover{background:#fee2e2;color:var(--coral)}
+.modal-body{padding:18px 22px 22px}
+.modal-footer{padding:13px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:#f8fafc;border-radius:0 0 16px 16px}
+.form-sec{margin-bottom:18px}
+.form-sec-title{font-size:9.5px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--ocean);margin-bottom:10px;padding-bottom:6px;border-bottom:2px solid var(--teal-light)}
+.frow{display:grid;gap:10px;margin-bottom:10px}
+.fr2{grid-template-columns:1fr 1fr}
+.fr3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:10.5px;font-weight:600;color:var(--text2)}
+.field input,.field select,.field textarea{padding:8px 11px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:12.5px;color:var(--text);background:#fff;font-family:'DM Sans',sans-serif;outline:none;transition:border .12s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(13,148,136,0.08)}
+.field textarea{resize:vertical;min-height:65px}
+.field-calc{background:#f0fdf9!important;border-color:var(--teal-light)!important;color:var(--teal)!important;font-weight:700}
+
+/* SECTION HEADER */
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.sec-title{font-family:'Playfair Display',serif;font-size:17px;color:var(--ocean)}
+
+/* CHIPS */
+.chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--text2);transition:all .13s}
+.chip.active{background:var(--ocean);color:#fff;border-color:var(--ocean)}
+.chip:hover:not(.active){border-color:var(--teal);color:var(--teal)}
+
+/* BOAT CARD */
+.boat-card{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:15px;box-shadow:var(--shadow);transition:all .18s;margin-bottom:9px}
+.boat-card:hover{box-shadow:var(--shadow-lg);border-color:var(--teal)}
+.boat-name{font-family:'Playfair Display',serif;font-size:15px;color:var(--ocean)}
+.boat-sub{font-size:11px;color:var(--text3);margin-top:2px}
+.boat-vals{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding-top:10px;border-top:1px solid var(--border);margin-top:10px}
+.bv-label{font-size:9px;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);font-weight:600}
+.bv-value{font-size:13px;font-weight:700;color:var(--text);margin-top:2px}
+.bv-value.hi{color:var(--teal)}
+
+/* TOUR CARD */
+.tour-card{background:var(--card);border:1px solid var(--border);border-radius:13px;overflow:hidden;box-shadow:var(--shadow)}
+
+/* TIMELINE */
+.tl-item{display:flex;gap:11px;padding:9px 0;position:relative}
+.tl-item:not(:last-child)::before{content:'';position:absolute;left:9px;top:26px;bottom:0;width:1.5px;background:linear-gradient(180deg,var(--border),transparent)}
+.tl-dot{width:20px;height:20px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;margin-top:2px;border:2px solid}
+.tl-title{font-size:12.5px;font-weight:600;color:var(--text)}
+.tl-sub{font-size:10.5px;color:var(--text3);margin-top:2px}
+
+/* PROGRESS */
+.prog{height:7px;border-radius:4px;background:#e2e8f0;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .5s ease}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;right:22px;background:var(--ocean);color:#fff;padding:11px 16px;border-radius:9px;font-size:12.5px;box-shadow:var(--shadow-lg);z-index:9999;transform:translateY(60px);opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);display:flex;align-items:center;gap:7px}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* WAVE BANNER */
+.wave-bg{background:linear-gradient(135deg,var(--ocean) 0%,var(--ocean2) 50%,var(--teal) 100%);border-radius:14px;padding:22px 24px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+.wave-bg::before{content:'';position:absolute;bottom:-20px;right:-20px;width:150px;height:150px;border-radius:50%;background:rgba(255,255,255,0.05)}
+.wave-bg::after{content:'';position:absolute;top:-40px;right:80px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,0.04)}
+.wt{font-family:'Playfair Display',serif;font-size:22px;font-weight:700}
+.ws{font-size:12px;opacity:.65;margin-top:3px}
+.wm{display:flex;gap:22px;margin-top:16px}
+.wm-val{font-size:20px;font-weight:700;font-family:'Playfair Display',serif}
+.wm-lbl{font-size:9.5px;opacity:.55;text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-icon">⚓</div>
+    <div class="logo-name">NáuticaGest</div>
+    <div class="logo-sub">Gestão Náutica</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" onclick="go('dashboard')"><span class="ic">📊</span><span>Dashboard</span></div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Produtos</div>
+    <div class="nav-item" onclick="go('embarcacoes')"><span class="ic">🚢</span><span>Embarcações</span><span class="nbadge" id="b-emb">0</span></div>
+    <div class="nav-item" onclick="go('passeios')"><span class="ic">⚓</span><span>Passeios</span><span class="nbadge" id="b-pass">0</span></div>
+    <div class="nav-item" onclick="go('tour360')"><span class="ic">🎥</span><span>Tour 360°</span><span class="nbadge" id="b-tour">0</span></div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Financeiro</div>
+    <div class="nav-item" onclick="go('financeiro')"><span class="ic">💰</span><span>Caixa</span></div>
+    <div class="nav-item" onclick="go('comissoes')"><span class="ic">📈</span><span>Comissões</span><span class="nbadge r" id="b-pend">0</span></div>
+    <div class="nav-item" onclick="go('investimentos')"><span class="ic">🏦</span><span>Investimentos</span></div>
+    <div class="nav-item" onclick="go('relatorios')"><span class="ic">📅</span><span>Relatórios</span></div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="sync-status" id="sync-status">⏳ Carregando...</div>
+    <button class="sfbtn" onclick="exportData()">💾 Exportar dados</button>
+    <button class="sfbtn" onclick="buscarNuvem()">🔄 Buscar da nuvem</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="tp-title">Dashboard</div>
+      <div class="topbar-sub" id="tp-sub">Visão geral do negócio</div>
+    </div>
+    <div class="topbar-right">
+      <span class="topbar-date" id="tp-date"></span>
+      <button class="btn btn-primary" id="add-btn" style="display:none" onclick="openAddModal()">+ Adicionar</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="view active" id="view-dashboard">
+      <div class="wave-bg">
+        <div class="wt">⚓ Bem-vinda, Grupo Aldio!</div>
+        <div class="ws">Dados sincronizados em tempo real</div>
+        <div class="wm">
+          <div><div class="wm-val" id="d-emb">0</div><div class="wm-lbl">Embarcações ativas</div></div>
+          <div><div class="wm-val" id="d-pass">0</div><div class="wm-lbl">Passeios no mês</div></div>
+          <div><div class="wm-val" id="d-tour">0</div><div class="wm-lbl">Tours ativos</div></div>
+          <div><div class="wm-val" id="d-rec">R$ 0</div><div class="wm-lbl">Receita total</div></div>
+        </div>
+      </div>
+      <div class="metrics-row mc4">
+        <div class="metric-card mc-teal"><span class="metric-icon">💰</span><div class="metric-label">Comissões emb.</div><div class="metric-value pos" id="d-comemb">R$ 0</div><div class="metric-sub">Receitas de vendas</div></div>
+        <div class="metric-card mc-ocean"><span class="metric-icon">⚓</span><div class="metric-label">Receita passeios</div><div class="metric-value pos" id="d-compass">R$ 0</div><div class="metric-sub">Comissões indicações</div></div>
+        <div class="metric-card mc-gold"><span class="metric-icon">🎥</span><div class="metric-label">Receita Tour 360°</div><div class="metric-value pos" id="d-comtour">R$ 0</div><div class="metric-sub">Tours entregues</div></div>
+        <div class="metric-card mc-coral"><span class="metric-icon">⚠️</span><div class="metric-label">A receber</div><div class="metric-value neg" id="d-pend">R$ 0</div><div class="metric-sub">Comissões pendentes</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">🚢 Portfólio embarcações</span></div>
+          <div class="card-body" id="d-portfolio"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">⏱ Atividades recentes</span></div>
+          <div class="card-body" id="d-timeline" style="padding:12px 17px"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📊 Receita por produto</span></div>
+        <div class="card-body">
+          <div style="display:flex;gap:10px;align-items:flex-end">
+            <div style="flex:1">
+              <div style="display:flex;align-items:flex-end;gap:5px;height:110px" id="d-chart"></div>
+              <div style="display:flex;gap:5px;margin-top:5px" id="d-chart-labels"></div>
+            </div>
+            <div style="min-width:130px;display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:10.5px;font-weight:600;color:var(--text2);margin-bottom:3px">Total acumulado</div>
+              <div style="display:flex;align-items:center;gap:7px"><div style="width:10px;height:10px;border-radius:3px;background:var(--teal)"></div><div><div style="font-size:10px;color:var(--text3)">Embarcações</div><div style="font-size:12.5px;font-weight:700;color:var(--teal)" id="d-leg-emb">R$ 0</div></div></div>
+              <div style="display:flex;align-items:center;gap:7px"><div style="width:10px;height:10px;border-radius:3px;background:var(--ocean)"></div><div><div style="font-size:10px;color:var(--text3)">Passeios</div><div style="font-size:12.5px;font-weight:700;color:var(--ocean)" id="d-leg-pass">R$ 0</div></div></div>
+              <div style="display:flex;align-items:center;gap:7px"><div style="width:10px;height:10px;border-radius:3px;background:var(--gold)"></div><div><div style="font-size:10px;color:var(--text3)">Tour 360°</div><div style="font-size:12.5px;font-weight:700;color:var(--gold)" id="d-leg-tour">R$ 0</div></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMBARCAÇÕES -->
+    <div class="view" id="view-embarcacoes">
+      <div class="sec-hdr"><div class="sec-title">Embarcações</div><button class="btn btn-primary" onclick="openModal('modal-emb')">+ Nova embarcação</button></div>
+      <div class="chips" id="chips-emb">
+        <div class="chip active" onclick="setEmbFilter('all',this)">Todas</div>
+        <div class="chip" onclick="setEmbFilter('À Venda',this)">À Venda</div>
+        <div class="chip" onclick="setEmbFilter('Em Negociação',this)">Em Negociação</div>
+        <div class="chip" onclick="setEmbFilter('Reservada',this)">Reservada</div>
+        <div class="chip" onclick="setEmbFilter('Vendida',this)">Vendida</div>
+      </div>
+      <div id="emb-list"></div>
+    </div>
+
+    <!-- PASSEIOS -->
+    <div class="view" id="view-passeios">
+      <div class="sec-hdr"><div class="sec-title">Passeios</div><button class="btn btn-primary" onclick="openModal('modal-pass')">+ Novo passeio</button></div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📋 Indicações para marinas</span><div style="display:flex;gap:7px"><span class="badge b-teal" id="p-total">0 passeios</span><span class="badge b-green" id="p-com">R$ 0</span></div></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Cliente</th><th>Marina</th><th>Data</th><th>Pessoas</th><th>Valor total</th><th>Comissão</th><th>Status</th><th></th></tr></thead>
+          <tbody id="pass-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- TOUR 360 -->
+    <div class="view" id="view-tour360">
+      <div class="sec-hdr"><div class="sec-title">Tour 360°</div><button class="btn btn-gold" onclick="openModal('modal-tour')">+ Novo projeto</button></div>
+      <div class="g3" id="tour-grid" style="margin-bottom:0"></div>
+    </div>
+
+    <!-- FINANCEIRO -->
+    <div class="view" id="view-financeiro">
+      <div class="sec-hdr"><div class="sec-title">Caixa</div><button class="btn btn-primary" onclick="openModal('modal-fin')">+ Lançamento</button></div>
+      <div class="metrics-row mc3">
+        <div class="metric-card mc-teal"><div class="metric-label">Total receitas</div><div class="metric-value pos" id="fin-rec">R$ 0</div></div>
+        <div class="metric-card mc-coral"><div class="metric-label">Total despesas</div><div class="metric-value neg" id="fin-desp">R$ 0</div></div>
+        <div class="metric-card mc-ocean"><div class="metric-label">Resultado líquido</div><div class="metric-value" id="fin-liq">R$ 0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">💳 Movimentações</span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Data</th><th>Tipo</th><th>Descrição</th><th>Produto</th><th>Valor</th><th>Forma</th><th>Status</th><th></th></tr></thead>
+          <tbody id="fin-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- COMISSÕES -->
+    <div class="view" id="view-comissoes">
+      <div class="sec-hdr"><div class="sec-title">Comissões</div></div>
+      <div class="g2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">✅ Recebidas</span></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ID</th><th>Produto</th><th>Valor</th><th>Data</th><th></th></tr></thead>
+            <tbody id="com-rec"></tbody>
+          </table></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">⏳ Pendentes</span></div>
+          <div class="table-wrap"><table>
+            <thead><tr><th>ID</th><th>Produto</th><th>Valor</th><th>Vencimento</th><th></th></tr></thead>
+            <tbody id="com-pend"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTIMENTOS -->
+    <div class="view" id="view-investimentos">
+      <div class="sec-hdr"><div class="sec-title">Investimentos PJ</div><button class="btn btn-primary" onclick="openModal('modal-inv')">+ Nova aplicação</button></div>
+      <div class="metrics-row mc4">
+        <div class="metric-card mc-ocean"><span class="metric-icon">🏦</span><div class="metric-label">Total aplicado</div><div class="metric-value" id="inv-total">R$ 0</div></div>
+        <div class="metric-card mc-teal"><span class="metric-icon">📈</span><div class="metric-label">Rendimento</div><div class="metric-value pos" id="inv-rend">R$ 0</div></div>
+        <div class="metric-card mc-green"><span class="metric-icon">💰</span><div class="metric-label">Saldo atual</div><div class="metric-value pos" id="inv-saldo">R$ 0</div></div>
+        <div class="metric-card mc-indigo"><span class="metric-icon">📊</span><div class="metric-label">Aplicações ativas</div><div class="metric-value" id="inv-qtd">0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">📋 Carteira de aplicações</span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Banco</th><th>Tipo</th><th>Taxa</th><th>Aplicado</th><th>Rendimento</th><th>Saldo</th><th>Vencimento</th><th>Status</th><th></th></tr></thead>
+          <tbody id="inv-tbody"></tbody>
+        </table></div>
+      </div>
+    </div>
+
+    <!-- RELATÓRIOS -->
+    <div class="view" id="view-relatorios">
+      <div class="sec-hdr">
+        <div class="sec-title">Relatórios</div>
+        <div style="display:flex;gap:7px">
+          <select id="rel-ano" onchange="renderRel()" style="padding:7px 11px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text)"><option>2026</option><option>2025</option></select>
+          <select id="rel-mes" onchange="renderRel()" style="padding:7px 11px;border-radius:8px;border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text)">
+            <option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4" selected>Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option>
+          </select>
+        </div>
+      </div>
+      <div class="metrics-row mc4">
+        <div class="metric-card mc-teal"><span class="metric-icon">📥</span><div class="metric-label">Receitas do mês</div><div class="metric-value pos" id="r-rec">R$ 0</div></div>
+        <div class="metric-card mc-coral"><span class="metric-icon">📤</span><div class="metric-label">Despesas do mês</div><div class="metric-value neg" id="r-desp">R$ 0</div></div>
+        <div class="metric-card mc-ocean"><span class="metric-icon">💡</span><div class="metric-label">Resultado líquido</div><div class="metric-value" id="r-liq">R$ 0</div></div>
+        <div class="metric-card mc-gold"><span class="metric-icon">📊</span><div class="metric-label">Margem</div><div class="metric-value" id="r-marg">0%</div></div>
+      </div>
+      <div class="g2" style="margin-bottom:14px">
+        <div class="card">
+          <div class="card-header"><span class="card-title">📊 Receita x Despesa — mês a mês</span></div>
+          <div class="card-body">
+            <div style="display:flex;align-items:flex-end;gap:4px;height:120px" id="r-chart"></div>
+            <div style="display:flex;gap:14px;margin-top:9px;font-size:10.5px">
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:var(--teal);display:inline-block"></span>Receitas</span>
+              <span style="display:flex;align-items:center;gap:5px"><span style="width:10px;height:10px;border-radius:3px;background:var(--coral);display:inline-block"></span>Despesas</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">🥧 Por produto — mês selecionado</span></div>
+          <div class="card-body" id="r-pizza"></div>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><span class="card-title">📅 Visão anual</span></div>
+        <div class="card-body" style="padding:0"><div class="table-wrap"><table>
+          <thead><tr><th>Produto</th><th>Jan</th><th>Fev</th><th>Mar</th><th>Abr</th><th>Mai</th><th>Jun</th><th>Jul</th><th>Ago</th><th>Set</th><th>Out</th><th>Nov</th><th>Dez</th><th>TOTAL</th></tr></thead>
+          <tbody id="r-anual"></tbody>
+        </table></div></div>
+      </div>
+
+      <!-- BALANÇO ANUAL -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="card-header"><span class="card-title">🏆 Balanço anual — Resumo executivo</span></div>
+        <div class="card-body">
+          <div class="metrics-row mc4" style="margin-bottom:14px">
+            <div class="metric-card mc-teal"><div class="metric-label">Total receitas ano</div><div class="metric-value pos" id="r-ano-rec">R$ 0</div></div>
+            <div class="metric-card mc-coral"><div class="metric-label">Total despesas ano</div><div class="metric-value neg" id="r-ano-desp">R$ 0</div></div>
+            <div class="metric-card mc-ocean"><div class="metric-label">Resultado líquido ano</div><div class="metric-value" id="r-ano-liq">R$ 0</div></div>
+            <div class="metric-card mc-gold"><div class="metric-label">Margem anual</div><div class="metric-value" id="r-ano-marg">—</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" id="r-ano-produtos"></div>
+        </div>
+      </div>
+
+      <div class="g2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">✅ Receitas do mês</span><span class="badge b-teal" id="r-rec-n">0</span></div>
+          <div id="r-rec-list" style="max-height:280px;overflow-y:auto"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">❌ Despesas do mês</span><span class="badge b-red" id="r-desp-n">0</span></div>
+          <div id="r-desp-list" style="max-height:280px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ═══════════════════ MODAIS ═══════════════════ -->
+
+<!-- Embarcação -->
+<div class="modal-overlay" id="modal-emb">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="me-title">🚢 Nova embarcação</div><button class="modal-close" onclick="closeModal('modal-emb')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-sec"><div class="form-sec-title">Dados da embarcação</div>
+        <div class="frow fr2"><div class="field"><label>Nome *</label><input id="me-nome" placeholder="Ex: Azimut 40 — Branca 2019"></div><div class="field"><label>Tipo</label><select id="me-tipo"><option>Lancha</option><option>Veleiro</option><option>Iate</option><option>Catamarã</option><option>Escuna</option><option>Jetski</option><option>Outro</option></select></div></div>
+        <div class="frow fr3"><div class="field"><label>Marca/Modelo</label><input id="me-modelo" placeholder="Azimut 40"></div><div class="field"><label>Ano</label><input id="me-ano" type="number" placeholder="2024"></div><div class="field"><label>Tamanho (pés)</label><input id="me-pes" type="number" placeholder="40"></div></div>
+        <div class="frow fr2"><div class="field"><label>Marina</label><input id="me-marina" placeholder="Marina da Glória — RJ"></div><div class="field"><label>Vaga</label><input id="me-vaga" placeholder="Vaga B-23"></div></div>
+        <div class="frow"><div class="field"><label>Descrição</label><textarea id="me-desc" placeholder="Estado, motor, equipamentos..."></textarea></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Vendedor / Proprietário</div>
+        <div class="frow fr2"><div class="field"><label>Nome *</label><input id="me-vendedor" placeholder="Nome do proprietário"></div><div class="field"><label>CPF/CNPJ</label><input id="me-cpf" placeholder="000.000.000-00"></div></div>
+        <div class="frow fr2"><div class="field"><label>WhatsApp</label><input id="me-tel" placeholder="(11) 99999-9999"></div><div class="field"><label>E-mail</label><input id="me-email" type="email" placeholder="email@email.com"></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Valores e comissão</div>
+        <div class="frow fr3"><div class="field"><label>Valor pedido (R$) *</label><input id="me-valor" type="number" placeholder="850000" oninput="calcComEmb()"></div><div class="field"><label>Comissão (%)</label><input id="me-pct" type="number" value="5" step="0.5" oninput="calcComEmb()"></div><div class="field"><label>Valor comissão</label><input id="me-com" class="field-calc" readonly></div></div>
+        <div class="frow fr2"><div class="field"><label>💸 Custo do serviço (R$)</label><input id="me-custo" type="number" placeholder="Ex: fotografia, visitas, anúncios..." oninput="calcLucroEmb()"></div><div class="field"><label>Lucro líquido estimado</label><input id="me-lucro" class="field-calc" readonly></div></div>
+        <div class="frow fr2"><div class="field"><label>Data de entrada</label><input id="me-entrada" type="date"></div><div class="field"><label>Status</label><select id="me-status"><option>À Venda</option><option>Em Negociação</option><option>Reservada</option><option>Vendida</option><option>Retirada</option></select></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Mídias e controle de venda</div>
+        <div class="frow fr3"><div class="field"><label>Nº fotos</label><input id="me-fotos" type="number" value="0"></div><div class="field"><label>Nº vídeos</label><input id="me-videos" type="number" value="0"></div><div class="field"><label>Tour 360°</label><select id="me-tour"><option>Não</option><option>Sim</option><option>Em produção</option></select></div></div>
+        <div class="frow"><div class="field"><label>Link mídias</label><input id="me-link" type="url" placeholder="https://drive.google.com/..."></div></div>
+        <div class="frow fr2"><div class="field"><label>Data de venda</label><input id="me-dtvenda" type="date"></div><div class="field"><label>Valor final de venda (R$)</label><input id="me-valfinal" type="number" placeholder="Se diferente do pedido"></div></div>
+        <div class="frow fr2"><div class="field"><label>Data pgto comissão</label><input id="me-dtpgto" type="date"></div><div class="field"><label>Status pagamento</label><select id="me-pgto"><option>Pendente</option><option>Pago</option><option>Não Aplicável</option></select></div></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-emb')">Cancelar</button><button class="btn btn-primary" id="me-btn" onclick="salvarEmb()">💾 Salvar embarcação</button></div>
+  </div>
+</div>
+
+<!-- Passeio -->
+<div class="modal-overlay" id="modal-pass">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="mp-title">⚓ Novo passeio</div><button class="modal-close" onclick="closeModal('modal-pass')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-sec"><div class="form-sec-title">Dados do cliente</div>
+        <div class="frow fr2"><div class="field"><label>Nome *</label><input id="mp-nome" placeholder="Nome do cliente"></div><div class="field"><label>WhatsApp</label><input id="mp-tel" placeholder="(11) 99999-9999"></div></div>
+        <div class="frow fr2"><div class="field"><label>E-mail</label><input id="mp-email" type="email" placeholder="cliente@email.com"></div><div class="field"><label>Como conheceu</label><select id="mp-origem"><option>Instagram</option><option>Indicação</option><option>Google</option><option>WhatsApp</option><option>Facebook</option><option>Outro</option></select></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Detalhes do passeio</div>
+        <div class="frow fr2"><div class="field"><label>Marina parceira *</label><input id="mp-marina" placeholder="Marina Enseada"></div><div class="field"><label>Data *</label><input id="mp-data" type="date"></div></div>
+        <div class="frow fr3"><div class="field"><label>Horário</label><input id="mp-hora" type="time" value="09:00"></div><div class="field"><label>Nº pessoas *</label><input id="mp-pessoas" type="number" placeholder="4" min="1"></div><div class="field"><label>Duração</label><select id="mp-dur"><option>2 horas</option><option>4 horas</option><option>Dia inteiro</option><option>Pernoite</option></select></div></div>
+        <div class="frow"><div class="field"><label>Roteiro/Destino</label><input id="mp-roteiro" placeholder="Ex: Ilhas da Baía"></div></div>
+        <div class="frow"><div class="field"><label>Observações</label><textarea id="mp-obs" placeholder="Comemorações, restrições..."></textarea></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Valores</div>
+        <div class="frow fr3"><div class="field"><label>Valor total (R$) *</label><input id="mp-valor" type="number" placeholder="1800" oninput="calcComPass()"></div><div class="field"><label>Comissão (%)</label><input id="mp-pct" type="number" value="20" oninput="calcComPass()"></div><div class="field"><label>Valor comissão</label><input id="mp-com" class="field-calc" readonly></div></div>
+        <div class="frow fr2"><div class="field"><label>💸 Custo do serviço (R$)</label><input id="mp-custo" type="number" placeholder="Ex: deslocamento, divulgação..."></div><div class="field"><label>Lucro líquido (comissão − custo)</label><input id="mp-lucro" class="field-calc" readonly></div></div>
+        <div class="frow fr2"><div class="field"><label>Status</label><select id="mp-status"><option>Pendente</option><option>Confirmado</option><option>Pago</option><option>Cancelado</option></select></div><div class="field"><label>Data recebimento</label><input id="mp-dtpgto" type="date"></div></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-pass')">Cancelar</button><button class="btn btn-primary" id="mp-btn" onclick="salvarPass()">💾 Salvar passeio</button></div>
+  </div>
+</div>
+
+<!-- Tour 360 -->
+<div class="modal-overlay" id="modal-tour">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="mt-title">🎥 Novo projeto Tour 360°</div><button class="modal-close" onclick="closeModal('modal-tour')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-sec"><div class="form-sec-title">Dados do projeto</div>
+        <div class="frow fr2"><div class="field"><label>Nome do local *</label><input id="mt-nome" placeholder="Pousada Mar Azul"></div><div class="field"><label>Tipo</label><select id="mt-tipo"><option>Pousada</option><option>Hotel</option><option>Restaurante</option><option>Embarcação</option><option>Outro</option></select></div></div>
+        <div class="frow fr2"><div class="field"><label>Cidade/Estado</label><input id="mt-cidade" placeholder="Búzios — RJ"></div><div class="field"><label>Contato</label><input id="mt-contato" placeholder="Nome e telefone"></div></div>
+        <div class="frow fr3"><div class="field"><label>Nº ambientes</label><input id="mt-ambientes" type="number" placeholder="8"></div><div class="field"><label>Fotógrafo</label><input id="mt-foto" placeholder="Nome"></div><div class="field"><label>Status</label><select id="mt-status"><option>Orçamento</option><option>Aprovado</option><option>Em produção</option><option>Entregue</option><option>Cancelado</option></select></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Cronograma</div>
+        <div class="frow fr3"><div class="field"><label>Data proposta</label><input id="mt-dtprop" type="date"></div><div class="field"><label>Início produção</label><input id="mt-dtinicio" type="date"></div><div class="field"><label>Previsão entrega</label><input id="mt-dtentrega" type="date"></div></div>
+      </div>
+      <div class="form-sec"><div class="form-sec-title">Financeiro</div>
+        <div class="frow fr3"><div class="field"><label>Valor cobrado (R$) *</label><input id="mt-valor" type="number" placeholder="2400" oninput="calcMargemTour()"></div><div class="field"><label>💸 Custo produção (R$)</label><input id="mt-custo" type="number" placeholder="640" oninput="calcMargemTour()"></div><div class="field"><label>Margem / Lucro líquido</label><input id="mt-margem" class="field-calc" readonly></div></div>
+        <div class="frow fr2"><div class="field"><label>Status pagamento</label><select id="mt-pgto"><option>Pendente</option><option>Parcial</option><option>Pago</option></select></div><div class="field"><label>Link do tour</label><input id="mt-link" type="url" placeholder="https://..."></div></div>
+        <div class="frow"><div class="field"><label>Observações</label><textarea id="mt-obs" placeholder="Detalhes do projeto..."></textarea></div></div>
+      </div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-tour')">Cancelar</button><button class="btn btn-gold" id="mt-btn" onclick="salvarTour()">💾 Salvar projeto</button></div>
+  </div>
+</div>
+
+<!-- Financeiro -->
+<div class="modal-overlay" id="modal-fin">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">💰 Lançamento financeiro</div><button class="modal-close" onclick="closeModal('modal-fin')">✕</button></div>
+    <div class="modal-body">
+      <div class="frow fr2"><div class="field"><label>Data *</label><input id="mf-data" type="date"></div><div class="field"><label>Tipo *</label><select id="mf-tipo"><option>Receita</option><option>Despesa</option></select></div></div>
+      <div class="frow fr2"><div class="field"><label>Valor (R$) *</label><input id="mf-valor" type="number" placeholder="1500"></div><div class="field"><label>Produto</label><select id="mf-produto"><option>Embarcações</option><option>Passeios</option><option>Tour 360°</option><option>Operacional</option><option>Marketing</option><option>Outro</option></select></div></div>
+      <div class="frow"><div class="field"><label>Descrição *</label><input id="mf-cat" placeholder="Ex: Comissão venda Azimut 40"></div></div>
+      <div class="frow fr2"><div class="field"><label>Forma de pagamento</label><select id="mf-forma"><option>Pix</option><option>TED</option><option>DOC</option><option>Dinheiro</option><option>Cartão</option><option>Débito</option></select></div><div class="field"><label>Status</label><select id="mf-status"><option>Recebido</option><option>Pago</option><option>Pendente</option></select></div></div>
+      <div class="frow"><div class="field"><label>Observações</label><textarea id="mf-obs" placeholder="Referência, notas..."></textarea></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-fin')">Cancelar</button><button class="btn btn-primary" id="mf-btn" onclick="salvarFin()">💾 Salvar</button></div>
+  </div>
+</div>
+
+<!-- Investimento -->
+<div class="modal-overlay" id="modal-inv">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">🏦 Nova aplicação financeira</div><button class="modal-close" onclick="closeModal('modal-inv')">✕</button></div>
+    <div class="modal-body">
+      <div class="frow fr2"><div class="field"><label>Banco/Instituição *</label><input id="mi-banco" placeholder="Nubank, Itaú, XP..."></div><div class="field"><label>Nome da conta PJ</label><input id="mi-conta" placeholder="Conta PJ — CNPJ..."></div></div>
+      <div class="frow fr2"><div class="field"><label>Tipo *</label><select id="mi-tipo"><option>CDB</option><option>CDI</option><option>LCI/LCA</option><option>Poupança PJ</option><option>Conta Corrente PJ</option><option>Fundos</option><option>Ações</option><option>Tesouro Direto</option><option>Outro</option></select></div><div class="field"><label>Taxa/Rentabilidade</label><input id="mi-taxa" placeholder="110% CDI ou 12,5% a.a."></div></div>
+      <div class="frow fr2"><div class="field"><label>Data aplicação *</label><input id="mi-data" type="date"></div><div class="field"><label>Vencimento</label><input id="mi-venc" type="date"></div></div>
+      <div class="frow fr3"><div class="field"><label>Valor aplicado (R$) *</label><input id="mi-valor" type="number" placeholder="10000"></div><div class="field"><label>Rendimento acumulado (R$)</label><input id="mi-rend" type="number" placeholder="350"></div><div class="field"><label>Saldo atual (R$)</label><input id="mi-saldo" type="number" placeholder="10350"></div></div>
+      <div class="frow fr2"><div class="field"><label>Status</label><select id="mi-status"><option>Ativo</option><option>Resgatado</option><option>Vencido</option></select></div><div class="field"><label>Observações</label><input id="mi-obs" placeholder="Objetivo, condições..."></div></div>
+    </div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('modal-inv')">Cancelar</button><button class="btn btn-primary" onclick="salvarInv()">💾 Salvar aplicação</button></div>
+  </div>
+</div>
+
+<!-- Detalhe -->
+<div class="modal-overlay" id="modal-det">
+  <div class="modal" style="max-width:700px">
+    <div class="modal-header">
+      <div><div class="modal-title" id="det-title"></div><div style="font-size:10.5px;color:var(--text3);margin-top:3px" id="det-id"></div></div>
+      <div style="display:flex;gap:7px;align-items:center"><button class="btn btn-primary btn-sm" id="det-edit">✏️ Editar</button><button class="modal-close" onclick="closeModal('modal-det')">✕</button></div>
+    </div>
+    <div class="modal-body" id="det-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ <span id="toast-msg"></span></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// FIREBASE CONFIG
+// ═══════════════════════════════════════════════════════
+const FB = "https://nauticaget-default-rtdb.firebaseio.com/nauticagest.json";
+
+// ═══════════════════════════════════════════════════════
+// DATABASE
+// ═══════════════════════════════════════════════════════
+let DB = { embarcacoes:[], passeios:[], tours:[], financeiro:[], investimentos:[] };
+let editId = null;
+let editType = null;
+let embFilter = 'all';
+
+// ═══════════════════════════════════════════════════════
+// SYNC
+// ═══════════════════════════════════════════════════════
+let syncTimer = null;
+let syncing = false;
+let pendingSync = false;
+
+function syncStatus(s) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  const map = { ok:'☁️ Sincronizado', err:'⚠️ Sem conexão', busy:'🔄 Sincronizando...' };
+  const col = { ok:'#10b981', err:'#ef4444', busy:'#f59e0b' };
+  el.textContent = map[s] || s;
+  el.style.color = col[s] || '#94a3b8';
+}
+
+async function saveCloud() {
+  if (syncing) return;
+  syncing = true;
+  syncStatus('busy');
+  try {
+    const r = await fetch(FB, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(DB)
+    });
+    syncStatus(r.ok ? 'ok' : 'err');
+  } catch(e) { syncStatus('err'); }
+  syncing = false;
+}
+
+async function buscarNuvem() {
+  syncStatus('busy');
+  try {
+    const r = await fetch(FB, {cache:'no-cache'});
+    if (!r.ok) { syncStatus('err'); return false; }
+    const d = await r.json();
+    if (d && typeof d === 'object' && Array.isArray(d.embarcacoes) && d.embarcacoes.length > 0) {
+      DB = d;
+      ensureArrays();
+      localStorage.setItem('ng_db', JSON.stringify(DB));
+      syncStatus('ok');
+      renderAll();
+      toast('Dados carregados da nuvem!');
+      return true;
+    } else {
+      // Firebase empty - push local data to cloud
+      syncStatus('ok');
+      if (DB.embarcacoes.length > 0 || DB.financeiro.length > 0) {
+        await saveCloud();
+        toast('Dados enviados para a nuvem! ✅');
+      }
+      return false;
+    }
+  } catch(e) {
+    console.log('Firebase offline:', e.message);
+    syncStatus('err');
+  }
+  return false;
+}
+
+function ensureArrays() {
+  ['embarcacoes','passeios','tours','financeiro','investimentos'].forEach(k => {
+    if (!Array.isArray(DB[k])) DB[k] = [];
+  });
+}
+
+function saveLocal() {
+  localStorage.setItem('ng_db', JSON.stringify(DB));
+}
+
+function schedule() {
+  saveLocal();
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(async () => {
+    await saveCloud();
+  }, 800);
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+const fmt = v => 'R$ ' + Number(v||0).toLocaleString('pt-BR', {minimumFractionDigits:0,maximumFractionDigits:0});
+const fmtDate = d => d ? d.split('-').reverse().join('/') : '—';
+const genId = (p,a) => p + String(a.length+1).padStart(3,'0');
+
+function statusBadge(s) {
+  const m = {
+    'À Venda':'b-blue','Em Negociação':'b-yellow','Reservada':'b-purple',
+    'Vendida':'b-green','Retirada':'b-gray',
+    'Confirmado':'b-teal','Pago':'b-green','Pendente':'b-yellow',
+    'Cancelado':'b-red','Recebido':'b-green',
+    'Entregue':'b-green','Em produção':'b-blue','Orçamento':'b-yellow','Aprovado':'b-teal',
+    'Ativo':'b-green','Resgatado':'b-blue','Vencido':'b-red'
+  };
+  return `<span class="badge ${m[s]||'b-gray'}">${s||'—'}</span>`;
+}
+
+function g(id) { const e=document.getElementById(id); return e?e.value:''; }
+function s(id,v) { const e=document.getElementById(id); if(e) e.textContent=v; }
+function h(id,v) { const e=document.getElementById(id); if(e) e.innerHTML=v; }
+
+// ═══════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════
+const VIEWS = {
+  dashboard:    ['Dashboard','Visão geral do negócio', null],
+  embarcacoes:  ['Embarcações','Portfólio de intermediação', 'modal-emb'],
+  passeios:     ['Passeios','Indicações para marinas parceiras', 'modal-pass'],
+  tour360:      ['Tour 360°','Projetos de tour virtual', 'modal-tour'],
+  financeiro:   ['Caixa','Fluxo de receitas e despesas', 'modal-fin'],
+  comissoes:    ['Comissões','Controle de recebimentos', null],
+  investimentos:['Investimentos PJ','Aplicações financeiras', 'modal-inv'],
+  relatorios:   ['Relatórios','Visão mensal e anual', null],
+};
+
+function go(id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const view = document.getElementById('view-'+id);
+  if (view) view.classList.add('active');
+  const nav = [...document.querySelectorAll('.nav-item')].find(n=>n.getAttribute('onclick')?.includes(`'${id}'`));
+  if (nav) nav.classList.add('active');
+  const [title, sub, modal] = VIEWS[id] || [id,'',null];
+  s('tp-title', title);
+  s('tp-sub', sub);
+  const addBtn = document.getElementById('add-btn');
+  if (addBtn) {
+    addBtn.style.display = modal ? 'inline-flex' : 'none';
+    const labels = {'modal-emb':'+ Nova embarcação','modal-pass':'+ Novo passeio','modal-tour':'+ Novo Tour 360°','modal-fin':'+ Lançamento','modal-inv':'+ Nova aplicação'};
+    if (modal) addBtn.textContent = labels[modal] || '+ Adicionar';
+  }
+  renderAll();
+}
+
+function openAddModal() {
+  const active = document.querySelector('.view.active')?.id?.replace('view-','');
+  const modal = VIEWS[active]?.[2];
+  if (modal) openModal(modal);
+}
+
+// ═══════════════════════════════════════════════════════
+// MODAL
+// ═══════════════════════════════════════════════════════
+function openModal(id) { document.getElementById(id)?.classList.add('open'); }
+function closeModal(id) {
+  document.getElementById(id)?.classList.remove('open');
+  // Reset edit state if it's a form modal
+  if (['modal-emb','modal-pass','modal-tour','modal-fin'].includes(id)) {
+    editId = null; editType = null;
+  }
+}
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('open'); });
+});
+
+// ═══════════════════════════════════════════════════════
+// CALC
+// ═══════════════════════════════════════════════════════
+function calcComEmb() {
+  const v=parseFloat(g('me-valor'))||0, p=parseFloat(g('me-pct'))||0;
+  const el=document.getElementById('me-com'); if(el) el.value=fmt(v*p/100);
+  calcLucroEmb();
+}
+function calcLucroEmb() {
+  const v=parseFloat(g('me-valor'))||0, p=parseFloat(g('me-pct'))||0;
+  const custo=parseFloat(g('me-custo'))||0;
+  const com=v*p/100;
+  const el=document.getElementById('me-lucro');
+  if(el) el.value=fmt(com-custo);
+}
+function calcComPass() {
+  const v=parseFloat(g('mp-valor'))||0, p=parseFloat(g('mp-pct'))||0;
+  const com=v*p/100;
+  const el=document.getElementById('mp-com'); if(el) el.value=fmt(com);
+  const custo=parseFloat(g('mp-custo'))||0;
+  const el2=document.getElementById('mp-lucro'); if(el2) el2.value=fmt(com-custo);
+}
+function calcMargemTour() {
+  const v=parseFloat(g('mt-valor'))||0, c=parseFloat(g('mt-custo'))||0;
+  const lucro=v-c;
+  const el=document.getElementById('mt-margem');
+  if(el) el.value = v>0 ? fmt(lucro)+' ('+((v-c)/v*100).toFixed(0)+'%)' : '—';
+}
+
+// ═══════════════════════════════════════════════════════
+// SAVE
+// ═══════════════════════════════════════════════════════
+function salvarEmb() {
+  const nome = g('me-nome').trim();
+  if (!nome) { toast('Informe o nome da embarcação','warn'); return; }
+  const valor = parseFloat(g('me-valor'))||0;
+  const pct   = parseFloat(g('me-pct'))||5;
+  const custo_emb = parseFloat(g('me-custo'))||0;
+  const obj = {
+    id: editId || genId('EMB-', DB.embarcacoes),
+    nome, tipo:g('me-tipo'), modelo:g('me-modelo'), ano:g('me-ano'), pes:g('me-pes'),
+    status:g('me-status'), marina:g('me-marina'), vaga:g('me-vaga'),
+    vendedor:g('me-vendedor'), cpf:g('me-cpf'), tel:g('me-tel'), email:g('me-email'),
+    valor, pct, custo:custo_emb, entrada:g('me-entrada'), fotos:g('me-fotos'), videos:g('me-videos'),
+    tour:g('me-tour'), link:g('me-link'), dtVenda:g('me-dtvenda'),
+    valorFinal:parseFloat(g('me-valfinal'))||0, dtPgto:g('me-dtpgto'),
+    pgtoStatus:g('me-pgto'), desc:g('me-desc')
+  };
+  if (editId) {
+    const i = DB.embarcacoes.findIndex(x=>x.id===editId);
+    if (i>=0) DB.embarcacoes[i]=obj;
+  } else {
+    DB.embarcacoes.push(obj);
+  }
+  // Auto-create financeiro entries (always on new save)
+  if (!editId) {
+    const hoje = obj.entrada||new Date().toISOString().slice(0,10);
+    // Custo do serviço — sempre que informado
+    if (custo_emb > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: hoje,
+        tipo: 'Despesa', produto: 'Embarcações',
+        cat: 'Custo intermediação — '+obj.nome,
+        valor: custo_emb, forma: 'A definir',
+        status: 'Pago', obs: 'custo_emb_'+obj.id
+      });
+    }
+    // Comissão — sempre que tiver valor pedido
+    const comVal = (obj.valorFinal||obj.valor||0)*(obj.pct||0)/100;
+    if (comVal > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: obj.dtPgto||obj.dtVenda||hoje,
+        tipo: 'Receita', produto: 'Embarcações',
+        cat: 'Comissão — '+obj.nome,
+        valor: comVal, forma: 'A definir',
+        status: obj.pgtoStatus==='Pago'?'Recebido':'Pendente',
+        obs: 'com_emb_'+obj.id
+      });
+    }
+  }
+  schedule(); closeModal('modal-emb'); resetBtn('me-btn','salvarEmb','💾 Salvar embarcação');
+  renderAll(); toast(editId?'Embarcação atualizada!':'Embarcação cadastrada!');
+}
+
+function salvarPass() {
+  const nome = g('mp-nome').trim();
+  if (!nome) { toast('Informe o nome do cliente','warn'); return; }
+  const valor = parseFloat(g('mp-valor'))||0;
+  const pct   = parseFloat(g('mp-pct'))||20;
+  const custo_pas = parseFloat(g('mp-custo'))||0;
+  const obj = {
+    id: editId || genId('PAS-', DB.passeios),
+    nome, tel:g('mp-tel'), email:g('mp-email'), origem:g('mp-origem'),
+    marina:g('mp-marina'), data:g('mp-data'), hora:g('mp-hora'), dur:g('mp-dur'),
+    pessoas:g('mp-pessoas')||1, roteiro:g('mp-roteiro'),
+    valor, pct, custo:custo_pas, status:g('mp-status'), dtPgto:g('mp-dtpgto'), obs:g('mp-obs')
+  };
+  if (editId) { const i=DB.passeios.findIndex(x=>x.id===editId); if(i>=0) DB.passeios[i]=obj; }
+  else DB.passeios.push(obj);
+  // Auto-create financeiro entries (always on new save)
+  if (!editId) {
+    const hoje = obj.data||new Date().toISOString().slice(0,10);
+    // Custo do serviço — sempre que informado
+    if (custo_pas > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: hoje,
+        tipo: 'Despesa', produto: 'Passeios',
+        cat: 'Custo passeio — '+(obj.marina||obj.nome),
+        valor: custo_pas, forma: 'A definir',
+        status: 'Pago', obs: 'custo_pas_'+obj.id
+      });
+    }
+    // Comissão — sempre que tiver valor
+    const comVal = (obj.valor||0)*(obj.pct||0)/100;
+    if (comVal > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: obj.dtPgto||hoje,
+        tipo: 'Receita', produto: 'Passeios',
+        cat: 'Comissão passeio — '+(obj.marina||obj.nome),
+        valor: comVal, forma: 'A definir',
+        status: obj.status==='Pago'?'Recebido':'Pendente',
+        obs: 'com_pas_'+obj.id
+      });
+    }
+  }
+  schedule(); closeModal('modal-pass'); resetBtn('mp-btn','salvarPass','💾 Salvar passeio');
+  renderAll(); toast(editId?'Passeio atualizado!':'Passeio registrado!');
+}
+
+function salvarTour() {
+  const nome = g('mt-nome').trim();
+  if (!nome) { toast('Informe o nome do projeto','warn'); return; }
+  const obj = {
+    id: editId || genId('TOU-', DB.tours),
+    nome, tipo:g('mt-tipo'), cidade:g('mt-cidade'), contato:g('mt-contato'),
+    status:g('mt-status'), dtProp:g('mt-dtprop'), dtInicio:g('mt-dtinicio'), dtEntrega:g('mt-dtentrega'),
+    valor:parseFloat(g('mt-valor'))||0, custo:parseFloat(g('mt-custo'))||0,
+    ambientes:g('mt-ambientes'), foto:g('mt-foto'), pgto:g('mt-pgto'), link:g('mt-link'), obs:g('mt-obs')
+  };
+  if (editId) { const i=DB.tours.findIndex(x=>x.id===editId); if(i>=0) DB.tours[i]=obj; }
+  else DB.tours.push(obj);
+  // Auto-create financeiro entries (always on new save)
+  if (!editId) {
+    const hoje = new Date().toISOString().slice(0,10);
+    // Custo de produção — sempre que informado
+    if (obj.custo > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: obj.dtInicio||obj.dtProp||hoje,
+        tipo: 'Despesa', produto: 'Tour 360°',
+        cat: 'Custo produção — '+obj.nome,
+        valor: obj.custo, forma: 'A definir',
+        status: 'Pago', obs: 'custo_tour_'+obj.id
+      });
+    }
+    // Receita — sempre que tiver valor (independente do status de pgto)
+    if (obj.valor > 0) {
+      DB.financeiro.push({
+        id: genId('FIN-', DB.financeiro),
+        data: obj.dtEntrega||obj.dtProp||hoje,
+        tipo: 'Receita', produto: 'Tour 360°',
+        cat: 'Tour 360° — '+obj.nome,
+        valor: obj.valor, forma: 'A definir',
+        status: obj.pgto==='Pago'?'Recebido':'Pendente',
+        obs: 'rec_tour_'+obj.id
+      });
+    }
+  }
+  schedule(); closeModal('modal-tour'); resetBtn('mt-btn','salvarTour','💾 Salvar projeto');
+  renderAll(); toast(editId?'Tour atualizado!':'Projeto criado!');
+}
+
+function salvarFin() {
+  const cat = g('mf-cat').trim();
+  if (!cat) { toast('Informe a descrição','warn'); return; }
+  const obj = {
+    id: editId || genId('FIN-', DB.financeiro),
+    data:g('mf-data'), tipo:g('mf-tipo'), valor:parseFloat(g('mf-valor'))||0,
+    produto:g('mf-produto'), cat, forma:g('mf-forma'), status:g('mf-status'), obs:g('mf-obs')
+  };
+  if (editId) { const i=DB.financeiro.findIndex(x=>x.id===editId); if(i>=0) DB.financeiro[i]=obj; }
+  else DB.financeiro.push(obj);
+  schedule(); closeModal('modal-fin'); resetBtn('mf-btn','salvarFin','💾 Salvar');
+  renderAll(); toast(editId?'Lançamento atualizado!':'Lançamento registrado!');
+}
+
+function salvarInv() {
+  const banco = g('mi-banco').trim();
+  if (!banco) { toast('Informe o banco','warn'); return; }
+  const obj = {
+    id: editId || genId('INV-', DB.investimentos),
+    banco, conta:g('mi-conta'), tipo:g('mi-tipo'), taxa:g('mi-taxa'),
+    data:g('mi-data'), vencimento:g('mi-venc'),
+    valor:parseFloat(g('mi-valor'))||0, rendimento:parseFloat(g('mi-rend'))||0,
+    saldo:parseFloat(g('mi-saldo'))||0, status:g('mi-status'), obs:g('mi-obs')
+  };
+  if (editId) { const i=DB.investimentos.findIndex(x=>x.id===editId); if(i>=0) DB.investimentos[i]=obj; }
+  else DB.investimentos.push(obj);
+  schedule(); closeModal('modal-inv');
+  renderAll(); toast('Aplicação registrada!');
+}
+
+// ═══════════════════════════════════════════════════════
+// DELETE
+// ═══════════════════════════════════════════════════════
+function del(type, id) {
+  if (!confirm('Remover este registro?')) return;
+  DB[type] = DB[type].filter(x=>x.id!==id);
+  schedule(); renderAll(); toast('Removido!');
+}
+
+// ═══════════════════════════════════════════════════════
+// EDIT
+// ═══════════════════════════════════════════════════════
+function resetBtn(btnId, fn, label) {
+  const btn = document.getElementById(btnId);
+  if (btn) { btn.textContent=label; btn.onclick=window[fn]; }
+}
+
+function editEmb(id) {
+  const e = DB.embarcacoes.find(x=>x.id===id); if(!e) return;
+  editId=id; editType='embarcacoes';
+  const F = {
+    'me-nome':e.nome,'me-tipo':e.tipo,'me-modelo':e.modelo,'me-ano':e.ano,'me-pes':e.pes,
+    'me-status':e.status,'me-marina':e.marina,'me-vaga':e.vaga,'me-vendedor':e.vendedor,
+    'me-cpf':e.cpf,'me-tel':e.tel,'me-email':e.email,'me-valor':e.valor,'me-pct':e.pct||5,
+    'me-entrada':e.entrada,'me-fotos':e.fotos,'me-videos':e.videos,'me-tour':e.tour||'Não',
+    'me-link':e.link||'','me-dtvenda':e.dtVenda||'','me-valfinal':e.valorFinal||'',
+    'me-dtpgto':e.dtPgto||'','me-pgto':e.pgtoStatus||'Pendente','me-desc':e.desc||''
+  };
+  Object.entries(F).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v||''; });
+  calcComEmb();
+  const btn=document.getElementById('me-btn');
+  if(btn){btn.textContent='💾 Atualizar';btn.onclick=salvarEmb;}
+  openModal('modal-emb');
+}
+
+function editPass(id) {
+  const p=DB.passeios.find(x=>x.id===id); if(!p) return;
+  editId=id;
+  const F={
+    'mp-nome':p.nome,'mp-tel':p.tel,'mp-email':p.email,'mp-origem':p.origem||'Instagram',
+    'mp-marina':p.marina,'mp-data':p.data,'mp-hora':p.hora||'09:00','mp-dur':p.dur||'4 horas',
+    'mp-pessoas':p.pessoas,'mp-roteiro':p.roteiro||'','mp-valor':p.valor,'mp-pct':p.pct||20,
+    'mp-status':p.status||'Pendente','mp-dtpgto':p.dtPgto||'','mp-obs':p.obs||'','mp-custo':p.custo||''
+  };
+  Object.entries(F).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v||''; });
+  calcComPass();
+  const btn=document.getElementById('mp-btn');
+  if(btn){btn.textContent='💾 Atualizar';btn.onclick=salvarPass;}
+  openModal('modal-pass');
+}
+
+function editTour(id) {
+  const t=DB.tours.find(x=>x.id===id); if(!t) return;
+  editId=id;
+  const F={
+    'mt-nome':t.nome,'mt-tipo':t.tipo,'mt-cidade':t.cidade,'mt-contato':t.contato,
+    'mt-status':t.status,'mt-dtprop':t.dtProp||'','mt-dtinicio':t.dtInicio||'',
+    'mt-dtentrega':t.dtEntrega||'','mt-valor':t.valor,'mt-custo':t.custo,
+    'mt-ambientes':t.ambientes||'','mt-foto':t.foto||'','mt-pgto':t.pgto||'Pendente',
+    'mt-link':t.link||'','mt-obs':t.obs||''
+  };
+  Object.entries(F).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v||''; });
+  calcMargemTour();
+  const btn=document.getElementById('mt-btn');
+  if(btn){btn.textContent='💾 Atualizar';btn.onclick=salvarTour;}
+  openModal('modal-tour');
+}
+
+function editFin(id) {
+  const f=DB.financeiro.find(x=>x.id===id); if(!f) return;
+  editId=id;
+  const F={
+    'mf-data':f.data,'mf-tipo':f.tipo,'mf-valor':f.valor,'mf-produto':f.produto,
+    'mf-cat':f.cat,'mf-forma':f.forma,'mf-status':f.status,'mf-obs':f.obs||''
+  };
+  Object.entries(F).forEach(([k,v])=>{ const el=document.getElementById(k); if(el) el.value=v||''; });
+  const btn=document.getElementById('mf-btn');
+  if(btn){btn.textContent='💾 Atualizar';btn.onclick=salvarFin;}
+  openModal('modal-fin');
+}
+
+// ═══════════════════════════════════════════════════════
+// DETAIL
+// ═══════════════════════════════════════════════════════
+function dr(label, val) {
+  if (!val || val==='0' || val===0) return '';
+  return `<div style="margin-bottom:10px"><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--text3);margin-bottom:2px">${label}</div><div style="font-size:12.5px;color:var(--text);font-weight:500">${val}</div></div>`;
+}
+
+function showDetail(type, id) {
+  const map = {embarcacoes:DB.embarcacoes, passeios:DB.passeios, tours:DB.tours};
+  const obj = (map[type]||[]).find(x=>x.id===id);
+  if (!obj) return;
+  let content = '';
+  if (type==='embarcacoes') {
+    const com=(obj.valorFinal||obj.valor)*(obj.pct/100);
+    content=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Embarcação</div>
+      ${dr('Nome',obj.nome)}${dr('Tipo',obj.tipo)}${dr('Modelo',obj.modelo)}${dr('Ano',obj.ano)}${dr('Tamanho',obj.pes?obj.pes+' pés':'')}${dr('Marina',obj.marina)}${dr('Vaga',obj.vaga)}${dr('Status',obj.status)}</div>
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Vendedor</div>
+      ${dr('Nome',obj.vendedor)}${dr('CPF/CNPJ',obj.cpf)}${dr('Telefone',obj.tel)}${dr('E-mail',obj.email)}
+      <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px;margin-top:14px">Valores</div>
+      ${dr('Valor pedido',fmt(obj.valor))}${dr('Comissão',obj.pct+'%')}${dr('Valor comissão',fmt(com))}${obj.valorFinal?dr('Valor final',fmt(obj.valorFinal)):''}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      ${dr('Entrada',fmtDate(obj.entrada))}${dr('Venda',fmtDate(obj.dtVenda))}${dr('Pgto',fmtDate(obj.dtPgto))}
+      ${dr('Status pgto',obj.pgtoStatus)}${dr('Fotos',obj.fotos)}${dr('Vídeos',obj.videos)}${dr('Tour 360°',obj.tour)}
+    </div>
+    ${obj.desc?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);margin-bottom:6px">Observações</div><p style="font-size:12px;color:var(--text2);line-height:1.5">${obj.desc}</p></div>`:''}
+    ${obj.link?`<div style="margin-top:10px"><a href="${obj.link}" target="_blank" class="btn btn-outline" style="display:inline-flex">🔗 Ver mídias</a></div>`:''}`;
+  } else if (type==='passeios') {
+    content=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Cliente</div>
+      ${dr('Nome',obj.nome)}${dr('Telefone',obj.tel)}${dr('E-mail',obj.email)}${dr('Como conheceu',obj.origem)}</div>
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Passeio</div>
+      ${dr('Marina',obj.marina)}${dr('Data',fmtDate(obj.data))}${dr('Horário',obj.hora)}${dr('Duração',obj.dur)}${dr('Pessoas',obj.pessoas)}${dr('Roteiro',obj.roteiro)}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+      ${dr('Valor total',fmt(obj.valor))}${dr('Comissão',obj.pct+'%')}${dr('Valor comissão',fmt(obj.valor*obj.pct/100))}${dr('Status',obj.status)}${dr('Recebimento',fmtDate(obj.dtPgto))}
+    </div>
+    ${obj.obs?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);margin-bottom:6px">Observações</div><p style="font-size:12px;color:var(--text2)">${obj.obs}</p></div>`:''}`;
+  } else if (type==='tours') {
+    const m=obj.valor>0?((obj.valor-obj.custo)/obj.valor*100).toFixed(0):0;
+    content=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Projeto</div>
+      ${dr('Nome',obj.nome)}${dr('Tipo',obj.tipo)}${dr('Cidade',obj.cidade)}${dr('Contato',obj.contato)}${dr('Status',obj.status)}${dr('Ambientes',obj.ambientes)}${dr('Fotógrafo',obj.foto)}</div>
+      <div><div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px">Financeiro</div>
+      ${dr('Valor cobrado',fmt(obj.valor))}${dr('Custo',fmt(obj.custo))}${dr('Margem',m+'%')}${dr('Status pgto',obj.pgto)}
+      <div style="font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--ocean);border-bottom:2px solid var(--teal-light);padding-bottom:5px;margin-bottom:10px;margin-top:14px">Cronograma</div>
+      ${dr('Proposta',fmtDate(obj.dtProp))}${dr('Início',fmtDate(obj.dtInicio))}${dr('Entrega',fmtDate(obj.dtEntrega))}</div>
+    </div>
+    ${obj.obs?`<div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)"><p style="font-size:12px;color:var(--text2)">${obj.obs}</p></div>`:''}
+    ${obj.link?`<div style="margin-top:10px"><a href="${obj.link}" target="_blank" class="btn btn-outline" style="display:inline-flex">🔗 Ver tour</a></div>`:''}`;
+  }
+  s('det-title', obj.nome||obj.cat||'');
+  s('det-id', obj.id);
+  h('det-body', content);
+  const editFns={embarcacoes:editEmb,passeios:editPass,tours:editTour};
+  const editBtn=document.getElementById('det-edit');
+  if(editBtn) editBtn.onclick=()=>{ closeModal('modal-det'); editFns[type]?.(id); };
+  openModal('modal-det');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER DASHBOARD
+// ═══════════════════════════════════════════════════════
+function renderDash() {
+  const emb = DB.embarcacoes || [];
+  const pas = DB.passeios || [];
+  const tours = DB.tours || [];
+  const fin = DB.financeiro || [];
+  const inv = DB.investimentos || [];
+
+  const ativas = emb.filter(e=>['À Venda','Em Negociação','Reservada'].includes(e.status)).length;
+  const toursAtivos = tours.filter(t=>!['Entregue','Cancelado'].includes(t.status)).length;
+  const now = new Date();
+  const mesAtual = now.getMonth();
+  const anoAtual = now.getFullYear();
+  const passMes = pas.filter(p=>{ if(!p.data) return false; const d=new Date(p.data+'T12:00'); return d.getMonth()===mesAtual&&d.getFullYear()===anoAtual; }).length;
+
+  const recTot = fin.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+(f.valor||0),0);
+  const recEmb = fin.filter(f=>f.tipo==='Receita'&&f.produto==='Embarcações').reduce((s,f)=>s+(f.valor||0),0);
+  const recPas = fin.filter(f=>f.tipo==='Receita'&&f.produto==='Passeios').reduce((s,f)=>s+(f.valor||0),0);
+  const recTour = fin.filter(f=>f.tipo==='Receita'&&f.produto==='Tour 360°').reduce((s,f)=>s+(f.valor||0),0);
+  const pend = emb.filter(e=>e.pgtoStatus==='Pendente'&&['Vendida','Reservada'].includes(e.status)).reduce((s,e)=>s+(e.valorFinal||e.valor||0)*(e.pct||0)/100,0);
+
+  s('d-emb', ativas);
+  s('d-pass', passMes);
+  s('d-tour', toursAtivos);
+  s('d-rec', fmt(recTot));
+  s('d-comemb', fmt(recEmb));
+  s('d-compass', fmt(recPas));
+  s('d-comtour', fmt(recTour));
+  s('d-pend', fmt(pend));
+  s('d-leg-emb', fmt(recEmb));
+  s('d-leg-pass', fmt(recPas));
+  s('d-leg-tour', fmt(recTour));
+
+  // Portfolio bars
+  const tot = emb.length || 1;
+  const cats = [
+    {l:'À Venda',c:emb.filter(e=>e.status==='À Venda').length,col:'var(--teal)'},
+    {l:'Em Neg.',c:emb.filter(e=>e.status==='Em Negociação').length,col:'var(--ocean3)'},
+    {l:'Reservada',c:emb.filter(e=>e.status==='Reservada').length,col:'var(--gold)'},
+    {l:'Vendida',c:emb.filter(e=>e.status==='Vendida').length,col:'var(--indigo)'},
+  ];
+  h('d-portfolio', cats.map(c=>`
+    <div style="margin-bottom:11px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;color:var(--text2);font-weight:500">${c.l}</span>
+        <span style="font-size:12px;font-weight:700">${c.c}</span>
+      </div>
+      <div class="prog"><div class="prog-fill" style="width:${c.c/tot*100}%;background:${c.col}"></div></div>
+    </div>`).join('') || '<p style="color:var(--text3);font-size:12px">Nenhuma embarcação cadastrada.</p>');
+
+  // Timeline
+  const events = [
+    ...emb.filter(e=>e.dtVenda).map(e=>({date:e.dtVenda,title:`${e.nome} — vendida`,sub:`Vendedor: ${e.vendedor}`,col:'var(--teal)'})),
+    ...pas.slice(-3).map(p=>({date:p.data,title:`Passeio — ${p.marina||'Marina'}`,sub:`${p.pessoas} pessoas · ${fmt((p.valor||0)*(p.pct||0)/100)}`,col:'var(--ocean3)'})),
+    ...tours.filter(t=>t.status==='Entregue').map(t=>({date:t.dtEntrega,title:`Tour 360° — ${t.nome}`,sub:`Entregue · ${fmt(t.valor||0)}`,col:'var(--gold)'})),
+  ].sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,5);
+  h('d-timeline', events.length ? events.map(e=>`
+    <div class="tl-item">
+      <div class="tl-dot" style="background:${e.col}18;border-color:${e.col}"></div>
+      <div><div class="tl-title">${e.title}</div><div class="tl-sub">${fmtDate(e.date)} · ${e.sub}</div></div>
+    </div>`).join('') : '<p style="color:var(--text3);font-size:12px">Nenhuma atividade ainda.</p>');
+
+  // Monthly chart
+  const mesesN = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const maxV = Math.max(...mesesN.map((_,i)=>fin.filter(f=>{if(f.tipo!=='Receita'||!f.data)return false;try{const d=new Date(f.data.includes('/')?f.data.split('/').reverse().join('-')+'T12:00':f.data+'T12:00');return!isNaN(d)&&d.getMonth()===i;}catch(e){return false;}}).reduce((s,f)=>s+(f.valor||0),0)), 1);
+  h('d-chart', mesesN.slice(0,6).map((_,i)=>{
+    const rec=fin.filter(f=>{if(f.tipo!=='Receita'||!f.data)return false;try{const d=new Date(f.data.includes('/')?f.data.split('/').reverse().join('-')+'T12:00':f.data+'T12:00');return!isNaN(d)&&d.getMonth()===i;}catch(e){return false;}}).reduce((s,f)=>s+(f.valor||0),0);
+    const hh=Math.max(3,(rec/maxV)*100);
+    const active=i===mesAtual;
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px">
+      <div style="flex:1;display:flex;align-items:flex-end;width:100%">
+        <div style="width:100%;height:${hh}px;background:${active?'var(--teal)':'#bfdbfe'};border-radius:3px 3px 0 0;opacity:${active?1:.7}"></div>
+      </div>
+      <div style="font-size:8.5px;color:${active?'var(--ocean)':'var(--text3)'};font-weight:${active?700:400}">${mesesN[i]}</div>
+    </div>`;
+  }).join(''));
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER EMBARCAÇÕES
+// ═══════════════════════════════════════════════════════
+function setEmbFilter(f, el) {
+  embFilter = f;
+  document.querySelectorAll('#chips-emb .chip').forEach(c=>c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderEmb();
+}
+
+function renderEmb() {
+  let list = DB.embarcacoes;
+  if (embFilter !== 'all') list = list.filter(e=>e.status===embFilter);
+  h('emb-list', list.length ? list.map(e=>{
+    const com = (e.valorFinal||e.valor||0)*(e.pct||0)/100;
+    return `<div class="boat-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div style="cursor:pointer" onclick="showDetail('embarcacoes','${e.id}')">
+          <div class="boat-name">${e.nome}</div>
+          <div class="boat-sub">${e.tipo}${e.pes?' · '+e.pes+' pés':''}${e.ano?' · '+e.ano:''}${e.marina?' · '+e.marina:''}</div>
+        </div>
+        <div style="display:flex;gap:5px;align-items:center">
+          ${statusBadge(e.status)}
+          <button class="btn btn-outline btn-sm" onclick="editEmb('${e.id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="del('embarcacoes','${e.id}')">✕</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
+        <span class="badge b-gray">${e.id}</span>
+        ${e.tour==='Sim'?'<span class="badge b-purple">🎥 Tour 360°</span>':''}
+        ${e.fotos>0?`<span class="badge b-gray">📷 ${e.fotos} fotos</span>`:''}
+        ${e.videos>0?`<span class="badge b-gray">🎬 ${e.videos} vídeos</span>`:''}
+      </div>
+      <div class="boat-vals">
+        <div><div class="bv-label">Valor pedido</div><div class="bv-value">${fmt(e.valor)}</div></div>
+        <div><div class="bv-label">Comissão</div><div class="bv-value hi">${fmt(com)} (${e.pct||0}%)</div></div>
+        <div><div class="bv-label">Vendedor</div><div class="bv-value">${e.vendedor||'—'}</div></div>
+        <div><div class="bv-label">Custo serviço</div><div class="bv-value neg" style="color:var(--coral)">${e.custo>0?fmt(e.custo):'—'}</div></div>
+        <div><div class="bv-label">Lucro líquido</div><div class="bv-value hi">${e.custo>0?fmt((e.valorFinal||e.valor||0)*(e.pct||0)/100-(e.custo||0)):'—'}</div></div>
+        <div><div class="bv-label">Pgto comissão</div><div class="bv-value" style="color:${e.pgtoStatus==='Pago'?'var(--teal)':'var(--coral)'}">${e.pgtoStatus||'—'}</div></div>
+      </div>
+    </div>`;
+  }).join('') : '<p style="color:var(--text3);text-align:center;padding:40px">Nenhuma embarcação encontrada.</p>');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER PASSEIOS
+// ═══════════════════════════════════════════════════════
+function renderPass() {
+  const total = DB.passeios.reduce((s,p)=>s+(p.valor||0)*(p.pct||0)/100,0);
+  s('p-total', `${DB.passeios.length} passeios`);
+  s('p-com', fmt(total)+' em comissões');
+  h('pass-tbody', DB.passeios.length ? DB.passeios.map(p=>`
+    <tr>
+      <td><div class="td-bold">${p.nome}</div><div style="font-size:10px;color:var(--text3)">${p.origem||''}</div></td>
+      <td>${p.marina||'—'}</td>
+      <td>${fmtDate(p.data)}<div style="font-size:10px;color:var(--text3)">${p.hora||''} · ${p.dur||''}</div></td>
+      <td style="text-align:center"><span class="badge b-blue">${p.pessoas||0} pax</span></td>
+      <td class="td-bold">${fmt(p.valor)}</td>
+      <td class="money-pos">${fmt((p.valor||0)*(p.pct||0)/100)}</td>
+      <td>${statusBadge(p.status)}</td>
+      <td style="display:flex;gap:4px">
+        <button class="btn btn-outline btn-sm" onclick="showDetail('passeios','${p.id}')">👁</button>
+        <button class="btn btn-outline btn-sm" onclick="editPass('${p.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="del('passeios','${p.id}')">✕</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">Nenhum passeio registrado.</td></tr>');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER TOUR
+// ═══════════════════════════════════════════════════════
+function renderTour() {
+  const statusCol = {'Orçamento':'var(--gold)','Aprovado':'var(--teal)','Em produção':'var(--ocean3)','Entregue':'var(--indigo)','Cancelado':'#e2e8f0'};
+  h('tour-grid', DB.tours.length ? DB.tours.map(t=>{
+    const m = t.valor>0?((t.valor-t.custo)/t.valor*100).toFixed(0):0;
+    return `<div class="tour-card">
+      <div style="height:4px;background:${statusCol[t.status]||'#e2e8f0'}"></div>
+      <div style="padding:14px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:14px;color:var(--ocean)">${t.nome}</div>
+            <div style="font-size:10.5px;color:var(--text3);margin-top:2px">${t.tipo||''} · ${t.cidade||''}</div>
+          </div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end">
+            ${statusBadge(t.status)}
+            <button class="btn btn-outline btn-sm" onclick="showDetail('tours','${t.id}')">👁</button>
+            <button class="btn btn-outline btn-sm" onclick="editTour('${t.id}')">✏️</button>
+            <button class="btn btn-danger btn-sm" onclick="del('tours','${t.id}')">✕</button>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+          <div style="background:#f0fdf9;border-radius:8px;padding:9px">
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)">Valor</div>
+            <div style="font-size:14px;font-weight:700;color:var(--teal)">${fmt(t.valor)}</div>
+          </div>
+          <div style="background:#fef2f2;border-radius:8px;padding:9px">
+            <div style="font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--text3)">Custo</div>
+            <div style="font-size:14px;font-weight:700;color:var(--coral)">${fmt(t.custo)}</div>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;font-size:11.5px">
+          <span style="color:var(--text2)">Margem: <strong style="color:var(--teal)">${m}%</strong></span>
+          ${t.ambientes?`<span style="color:var(--text3)">${t.ambientes} ambientes</span>`:''}
+        </div>
+        ${t.dtEntrega?`<div style="font-size:10.5px;color:var(--text3);margin-top:6px">📅 Entrega: ${fmtDate(t.dtEntrega)}</div>`:''}
+        ${t.link?`<a href="${t.link}" target="_blank" style="font-size:10.5px;color:var(--teal);display:block;margin-top:5px">🔗 Ver tour</a>`:''}
+      </div>
+    </div>`;
+  }).join('') : '<p style="color:var(--text3);text-align:center;padding:40px;grid-column:1/-1">Nenhum projeto cadastrado.</p>');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER FINANCEIRO
+// ═══════════════════════════════════════════════════════
+function renderFin() {
+  const fin2 = DB.financeiro||[];
+  const rec = fin2.filter(f=>f.tipo==='Receita').reduce((s,f)=>s+(f.valor||0),0);
+  const desp = fin2.filter(f=>f.tipo==='Despesa').reduce((s,f)=>s+(f.valor||0),0);
+  s('fin-rec', fmt(rec));
+  s('fin-desp', fmt(desp));
+  const liqEl = document.getElementById('fin-liq');
+  if (liqEl) { liqEl.textContent=fmt(rec-desp); liqEl.className='metric-value '+(rec-desp>=0?'pos':'neg'); }
+  const sorted = [...(DB.financeiro||[])].sort((a,b)=>(b.data||'').localeCompare(a.data||''));
+  h('fin-tbody', sorted.length ? sorted.map(f=>`
+    <tr>
+      <td>${fmtDate(f.data)}</td>
+      <td>${statusBadge(f.tipo==='Receita'?'Recebido':'Pago').replace(f.tipo==='Receita'?'Recebido':'Pago',f.tipo)}</td>
+      <td><div class="td-bold">${f.cat||'—'}</div></td>
+      <td><span class="badge b-gray">${f.produto||'—'}</span></td>
+      <td class="${f.tipo==='Receita'?'money-pos':'money-neg'}">${f.tipo==='Despesa'?'− ':''}${fmt(f.valor)}</td>
+      <td style="font-size:11px;color:var(--text3)">${f.forma||'—'}</td>
+      <td>${statusBadge(f.status)}</td>
+      <td style="display:flex;gap:4px">
+        <button class="btn btn-outline btn-sm" onclick="editFin('${f.id}')">✏️</button>
+        <button class="btn btn-danger btn-sm" onclick="del('financeiro','${f.id}')">✕</button>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--text3);padding:30px">Nenhum lançamento.</td></tr>');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER COMISSÕES
+// ═══════════════════════════════════════════════════════
+function renderCom() {
+  const recebidas = DB.financeiro.filter(f=>f.tipo==='Receita'&&f.status==='Recebido');
+  const pendEmb = DB.embarcacoes.filter(e=>e.pgtoStatus==='Pendente'&&['Vendida','Reservada'].includes(e.status));
+  const pendPas = DB.passeios.filter(p=>p.status==='Pendente');
+  h('com-rec', recebidas.length ? recebidas.map(f=>`
+    <tr>
+      <td><span class="td-mono">${f.id}</span></td>
+      <td><span class="badge b-teal">${f.produto||'—'}</span></td>
+      <td class="money-pos">${fmt(f.valor)}</td>
+      <td>${fmtDate(f.data)}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="del('financeiro','${f.id}')">✕</button></td>
+    </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:24px">Nenhuma recebida.</td></tr>');
+  const pendRows = [
+    ...pendEmb.map(e=>({id:e.id,prod:'Embarcações',val:(e.valorFinal||e.valor||0)*(e.pct||0)/100,dt:e.dtPgto,type:'embarcacoes'})),
+    ...pendPas.map(p=>({id:p.id,prod:'Passeios',val:(p.valor||0)*(p.pct||0)/100,dt:p.data,type:'passeios'})),
+  ];
+  h('com-pend', pendRows.length ? pendRows.map(r=>`
+    <tr>
+      <td><span class="td-mono">${r.id}</span></td>
+      <td><span class="badge b-yellow">${r.prod}</span></td>
+      <td style="font-weight:700;color:var(--coral)">${fmt(r.val)}</td>
+      <td>${fmtDate(r.dt)}</td>
+      <td><button class="btn btn-primary btn-sm" onclick="marcarPago('${r.id}','${r.type}')">✅ Pago</button></td>
+    </tr>`).join('') : '<tr><td colspan="5" style="text-align:center;color:var(--text3);padding:24px">✅ Sem pendências!</td></tr>');
+}
+
+function marcarPago(id, type) {
+  const hoje = new Date().toISOString().slice(0,10);
+  if (type==='embarcacoes') {
+    const e=DB.embarcacoes.find(x=>x.id===id);
+    if(e){
+      e.pgtoStatus='Pago'; e.dtPgto=hoje;
+      const comVal=(e.valorFinal||e.valor||0)*(e.pct||0)/100;
+      if(comVal>0) DB.financeiro.push({
+        id:genId('FIN-',DB.financeiro), data:hoje,
+        tipo:'Receita', produto:'Embarcações',
+        cat:'Comissão — '+e.nome, valor:comVal,
+        forma:'A definir', status:'Recebido', obs:'Gerado automaticamente'
+      });
+    }
+  } else {
+    const p=DB.passeios.find(x=>x.id===id);
+    if(p){
+      p.status='Pago'; p.dtPgto=hoje;
+      const comVal=(p.valor||0)*(p.pct||0)/100;
+      if(comVal>0) DB.financeiro.push({
+        id:genId('FIN-',DB.financeiro), data:hoje,
+        tipo:'Receita', produto:'Passeios',
+        cat:'Comissão passeio — '+(p.marina||p.nome), valor:comVal,
+        forma:'Pix', status:'Recebido', obs:'Gerado automaticamente'
+      });
+    }
+  }
+  schedule(); renderAll(); toast('Comissão marcada como paga e lançada no caixa! ✅');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER INVESTIMENTOS
+// ═══════════════════════════════════════════════════════
+function renderInv() {
+  const inv = DB.investimentos || [];
+  const ativos = inv.filter(i=>i.status==='Ativo');
+  s('inv-total', fmt(ativos.reduce((s,i)=>s+(i.valor||0),0)));
+  s('inv-rend', fmt(ativos.reduce((s,i)=>s+(i.rendimento||0),0)));
+  s('inv-saldo', fmt(ativos.reduce((s,i)=>s+(i.saldo||i.valor||0),0)));
+  s('inv-qtd', ativos.length);
+  const stCls={'Ativo':'b-green','Resgatado':'b-blue','Vencido':'b-red'};
+  h('inv-tbody', inv.length ? [...inv].sort((a,b)=>(b.data||'').localeCompare(a.data||'')).map(i=>`
+    <tr>
+      <td><div class="td-bold">${i.banco||'—'}</div><div style="font-size:10px;color:var(--text3)">${i.conta||''}</div></td>
+      <td><span class="badge b-indigo">${i.tipo||'—'}</span></td>
+      <td style="font-size:11px;color:var(--text2)">${i.taxa||'—'}</td>
+      <td class="td-bold">${fmt(i.valor)}</td>
+      <td class="money-pos">${i.rendimento?fmt(i.rendimento):'—'}</td>
+      <td style="font-weight:700;color:var(--ocean)">${fmt(i.saldo||i.valor)}</td>
+      <td>${i.vencimento?fmtDate(i.vencimento):'—'}</td>
+      <td><span class="badge ${stCls[i.status]||'b-gray'}">${i.status||'—'}</span></td>
+      <td><button class="btn btn-danger btn-sm" onclick="del('investimentos','${i.id}')">✕</button></td>
+    </tr>`).join('') : '<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:30px">Nenhuma aplicação registrada.</td></tr>');
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER RELATÓRIOS
+// ═══════════════════════════════════════════════════════
+function renderRel() {
+  const anoEl=document.getElementById('rel-ano');
+  const mesEl=document.getElementById('rel-mes');
+  if(!anoEl||!mesEl) return;
+  const ano=parseInt(anoEl.value||2026);
+  const mes=parseInt(mesEl.value);
+  const fin=DB.financeiro||[];
+  const emb=DB.embarcacoes||[];
+  const pas=DB.passeios||[];
+  const tours=DB.tours||[];
+  const mesesN=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+  // Build virtual transactions from all modules
+  // Embarcações vendidas com comissão paga
+  const embTx = emb
+    .filter(e=>e.status==='Vendida' && e.dtVenda)
+    .map(e=>({
+      tipo:'Receita', produto:'Embarcações',
+      valor:(e.valorFinal||e.valor||0)*(e.pct||0)/100,
+      data:e.dtPgto||e.dtVenda, cat:'Comissão — '+e.nome,
+      status:e.pgtoStatus==='Pago'?'Recebido':'Pendente'
+    }));
+
+  // Passeios com comissão
+  const pasTx = pas
+    .filter(p=>p.data)
+    .map(p=>({
+      tipo:'Receita', produto:'Passeios',
+      valor:(p.valor||0)*(p.pct||0)/100,
+      data:p.dtPgto||p.data, cat:'Passeio — '+(p.marina||p.nome),
+      status:p.status==='Pago'?'Recebido':'Pendente'
+    }));
+
+  // Tours entregues
+  const tourTx = tours
+    .filter(t=>t.dtEntrega||t.dtProp)
+    .map(t=>({
+      tipo:'Receita', produto:'Tour 360°',
+      valor:t.valor||0,
+      data:t.dtEntrega||t.dtProp, cat:'Tour 360° — '+t.nome,
+      status:t.pgto==='Pago'?'Recebido':'Pendente'
+    }));
+
+  // Combine: financeiro (manual) + virtual from other modules
+  // To avoid double counting, only use virtual if not already in financeiro
+  // Use only financeiro - entries are auto-created when saving other modules
+  const allTx = [...fin];
+
+  const parseDate=(dateStr)=>{
+    if(!dateStr) return null;
+    try {
+      // Try YYYY-MM-DD format
+      if(/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return new Date(dateStr+'T12:00');
+      // Try DD/MM/YYYY format  
+      if(/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+        const [d,m,y]=dateStr.split('/');
+        return new Date(`${y}-${m}-${d}T12:00`);
+      }
+      return new Date(dateStr);
+    } catch(e) { return null; }
+  };
+
+  const getV=(tipo,prod,m)=>allTx.filter(f=>{
+    if(f.tipo!==tipo) return false;
+    if(prod&&f.produto!==prod) return false;
+    const d=parseDate(f.data);
+    if(!d||isNaN(d)) return false;
+    return d.getFullYear()===ano&&d.getMonth()===m;
+  }).reduce((s,f)=>s+(f.valor||0),0);
+
+  const getAllItems=(tipo,m)=>allTx.filter(f=>{
+    if(f.tipo!==tipo) return false;
+    const d=parseDate(f.data);
+    if(!d||isNaN(d)) return false;
+    return d.getFullYear()===ano&&d.getMonth()===m;
+  });
+
+  // KPIs
+  const mr=getV('Receita',null,mes), md=getV('Despesa',null,mes), ml=mr-md;
+  s('r-rec',fmt(mr)); s('r-desp',fmt(md));
+  const lEl=document.getElementById('r-liq');
+  if(lEl){lEl.textContent=fmt(ml);lEl.className='metric-value '+(ml>=0?'pos':'neg');}
+  const mEl=document.getElementById('r-marg');
+  if(mEl) mEl.textContent=mr>0?(ml/mr*100).toFixed(0)+'%':'—';
+
+  // Chart
+  const maxV2=Math.max(...mesesN.map((_,i)=>getV('Receita',null,i)),getV('Despesa',null,0),1);
+  h('r-chart', mesesN.map((_,i)=>{
+    const r=getV('Receita',null,i),d=getV('Despesa',null,i);
+    const hr=Math.max(3,(r/maxV2)*110),hd=Math.max(3,(d/maxV2)*110);
+    const act=i===mes;
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px">
+      <div style="display:flex;gap:1px;align-items:flex-end;height:110px;width:100%">
+        <div style="flex:1;height:${hr}px;background:var(--teal);border-radius:3px 3px 0 0;opacity:${act?1:.45}" title="${fmt(r)}"></div>
+        <div style="flex:1;height:${hd}px;background:var(--coral);border-radius:3px 3px 0 0;opacity:${act?1:.45}" title="${fmt(d)}"></div>
+      </div>
+      <div style="font-size:8px;color:${act?'var(--ocean)':'var(--text3)'};font-weight:${act?700:400}">${mesesN[i]}</div>
+    </div>`;
+  }).join(''));
+
+  // Pizza (horizontal bars)
+  const prods=[
+    {n:'Embarcações',cor:'var(--teal)',v:getV('Receita','Embarcações',mes)},
+    {n:'Passeios',cor:'var(--ocean)',v:getV('Receita','Passeios',mes)},
+    {n:'Tour 360°',cor:'var(--gold)',v:getV('Receita','Tour 360°',mes)},
+  ];
+  const maxP=Math.max(...prods.map(p=>p.v),1);
+  h('r-pizza', prods.map(p=>`
+    <div style="margin-bottom:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:12px;font-weight:600;color:${p.cor}">${p.n}</span>
+        <span style="font-size:12px;font-weight:700">${fmt(p.v)}</span>
+      </div>
+      <div style="height:9px;background:#f1f5f9;border-radius:5px;overflow:hidden">
+        <div style="height:100%;width:${p.v/maxP*100}%;background:${p.cor};border-radius:5px;transition:width .5s"></div>
+      </div>
+      <div style="font-size:9.5px;color:var(--text3);margin-top:2px">${mr>0?(p.v/mr*100).toFixed(0):0}% do total</div>
+    </div>`).join('')+(mr===0?'<p style="color:var(--text3);font-size:12px;text-align:center;padding:16px">Sem receitas neste mês.</p>':''));
+
+  // Anual table
+  const rows=[
+    {l:'Intermediação Emb.',p:'Embarcações',c:'var(--teal)'},
+    {l:'Passeios',p:'Passeios',c:'var(--ocean)'},
+    {l:'Tour 360°',p:'Tour 360°',c:'var(--gold)'},
+  ];
+  let thtml='';
+  rows.forEach(r=>{
+    let tot=0, cells='';
+    for(let m2=0;m2<12;m2++){const v=getV('Receita',r.p,m2);tot+=v;cells+=`<td style="text-align:right;font-size:11px;${m2===mes?'background:#f0fdf9;font-weight:700':''}">${v>0?fmt(v):'—'}</td>`;}
+    thtml+=`<tr><td style="font-weight:600;color:${r.c}">${r.l}</td>${cells}<td style="text-align:right;font-weight:700;color:${r.c};background:#f8fafc">${fmt(tot)}</td></tr>`;
+  });
+  // Totais
+  let rCells='',rTot=0,dCells='',dTot=0,lCells='',lTot=0;
+  for(let m2=0;m2<12;m2++){
+    const r=getV('Receita',null,m2),d=getV('Despesa',null,m2),l=r-d;
+    rTot+=r;dTot+=d;lTot+=l;
+    rCells+=`<td style="text-align:right;font-size:11px;background:#f0fdf9;color:var(--teal)">${r>0?fmt(r):'—'}</td>`;
+    dCells+=`<td style="text-align:right;font-size:11px;background:#fef2f2;color:var(--coral)">${d>0?fmt(d):'—'}</td>`;
+    lCells+=`<td style="text-align:right;font-size:11px;background:#eff6ff;color:${l>=0?'var(--ocean)':'var(--coral)'}">${l!==0?fmt(l):'—'}</td>`;
+  }
+  thtml+=`<tr style="border-top:2px solid var(--teal)"><td style="font-weight:700;color:var(--teal)">Total Receitas</td>${rCells}<td style="text-align:right;font-weight:700;color:var(--teal);background:#f0fdf9">${fmt(rTot)}</td></tr>`;
+  thtml+=`<tr><td style="font-weight:700;color:var(--coral)">Total Despesas</td>${dCells}<td style="text-align:right;font-weight:700;color:var(--coral);background:#fef2f2">${fmt(dTot)}</td></tr>`;
+  thtml+=`<tr style="border-top:2px solid var(--ocean)"><td style="font-weight:700;color:var(--ocean)">Resultado Líquido</td>${lCells}<td style="text-align:right;font-weight:700;color:${lTot>=0?'var(--ocean)':'var(--coral)'};background:#eff6ff">${fmt(lTot)}</td></tr>`;
+  h('r-anual', thtml);
+
+  // Detalhe do mês
+  const recItems=getAllItems('Receita',mes);
+  const despItems=getAllItems('Despesa',mes);
+  const ri=document.getElementById('r-rec-n'),di=document.getElementById('r-desp-n');
+  if(ri) ri.textContent=recItems.length+' lançamentos';
+  if(di) di.textContent=despItems.length+' lançamentos';
+
+  // ── Balanço anual ──
+  let anoRec=0, anoDesp=0;
+  for(let m2=0;m2<12;m2++){anoRec+=getV('Receita',null,m2);anoDesp+=getV('Despesa',null,m2);}
+  const anoLiq=anoRec-anoDesp;
+  const anoMarg=anoRec>0?(anoLiq/anoRec*100).toFixed(1)+'%':'—';
+  const elAR=document.getElementById('r-ano-rec');
+  const elAD=document.getElementById('r-ano-desp');
+  const elAL=document.getElementById('r-ano-liq');
+  const elAM=document.getElementById('r-ano-marg');
+  if(elAR) elAR.textContent=fmt(anoRec);
+  if(elAD) elAD.textContent=fmt(anoDesp);
+  if(elAM) elAM.textContent=anoMarg;
+  if(elAL){elAL.textContent=fmt(anoLiq);elAL.className='metric-value '+(anoLiq>=0?'pos':'neg');}
+
+  // Por produto anual
+  const prodAno=[
+    {n:'Embarcações',p:'Embarcações',c:'var(--teal)'},
+    {n:'Passeios',p:'Passeios',c:'var(--ocean)'},
+    {n:'Tour 360°',p:'Tour 360°',c:'var(--gold)'},
+  ];
+  let totalProdRec=0;
+  const prodData=prodAno.map(pr=>{
+    let rec=0,desp=0;
+    for(let m2=0;m2<12;m2++){rec+=getV('Receita',pr.p,m2);desp+=getV('Despesa',pr.p,m2);}
+    totalProdRec+=rec;
+    return {...pr,rec,desp,liq:rec-desp};
+  });
+  const elProd=document.getElementById('r-ano-produtos');
+  if(elProd) elProd.innerHTML=prodData.map(pr=>`
+    <div style="background:#f8fafc;border-radius:10px;padding:14px;border:1px solid var(--border)">
+      <div style="font-size:11px;font-weight:700;color:${pr.c};text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px">${pr.n}</div>
+      <div style="display:flex;flex-direction:column;gap:7px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:var(--text3)">Receita</span>
+          <span style="font-size:13px;font-weight:700;color:var(--teal)">${fmt(pr.rec)}</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:var(--text3)">Despesa</span>
+          <span style="font-size:13px;font-weight:700;color:var(--coral)">${fmt(pr.desp)}</span>
+        </div>
+        <div style="height:1px;background:var(--border)"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:11px;color:var(--text2);font-weight:600">Lucro líquido</span>
+          <span style="font-size:14px;font-weight:700;color:${pr.liq>=0?pr.c:'var(--coral)'}">
+            ${fmt(pr.liq)}
+          </span>
+        </div>
+        <div style="height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden">
+          <div style="height:100%;width:${anoRec>0?(pr.rec/anoRec*100):0}%;background:${pr.c};border-radius:4px"></div>
+        </div>
+        <div style="font-size:10px;color:var(--text3);text-align:right">${anoRec>0?(pr.rec/anoRec*100).toFixed(0):0}% da receita total</div>
+      </div>
+    </div>`).join('');
+  const itemRow=(f,isRec)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 17px;border-bottom:1px solid var(--border)"><div><div style="font-size:12px;font-weight:600">${f.cat||'—'}</div><div style="font-size:10px;color:var(--text3)">${fmtDate(f.data)} · ${f.produto||'—'}</div></div><div style="font-weight:700;color:${isRec?'var(--teal)':'var(--coral)'};">${isRec?'':' − '}${fmt(f.valor)}</div></div>`;
+  h('r-rec-list', recItems.length?recItems.map(f=>itemRow(f,true)).join(''):'<p style="color:var(--text3);font-size:12px;padding:20px;text-align:center">Nenhuma receita.</p>');
+  h('r-desp-list', despItems.length?despItems.map(f=>itemRow(f,false)).join(''):'<p style="color:var(--text3);font-size:12px;padding:20px;text-align:center">Nenhuma despesa.</p>');
+}
+
+// ═══════════════════════════════════════════════════════
+// BADGES
+// ═══════════════════════════════════════════════════════
+function updateBadges() {
+  const ativas=DB.embarcacoes.filter(e=>['À Venda','Em Negociação','Reservada'].includes(e.status)).length;
+  s('b-emb', ativas);
+  s('b-pass', DB.passeios.length);
+  s('b-tour', DB.tours.filter(t=>!['Entregue','Cancelado'].includes(t.status)).length);
+  const pend=DB.embarcacoes.filter(e=>e.pgtoStatus==='Pendente'&&['Vendida','Reservada'].includes(e.status)).length
+    + DB.passeios.filter(p=>p.status==='Pendente').length;
+  s('b-pend', pend);
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER ALL
+// ═══════════════════════════════════════════════════════
+function renderAll() {
+  ensureArrays();
+  renderDash();
+  renderEmb();
+  renderPass();
+  renderTour();
+  renderFin();
+  renderCom();
+  renderInv();
+  renderRel();
+  updateBadges();
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT
+// ═══════════════════════════════════════════════════════
+function exportData() {
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=`nautica_backup_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  toast('Backup exportado!');
+}
+
+// ═══════════════════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════════════════
+function toast(msg, type='ok') {
+  const t=document.getElementById('toast');
+  t.innerHTML=(type==='warn'?'⚠️':'✅')+' <span>'+msg+'</span>';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+document.getElementById('tp-date').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+
+// Load data: try Firebase first, then localStorage
+(async function init() {
+  syncStatus('busy');
+
+  // Step 1: Load from localStorage immediately
+  try {
+    const local = localStorage.getItem('ng_db');
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed && parsed.embarcacoes) {
+        DB = parsed;
+        ensureArrays();
+      }
+    }
+  } catch(e) {}
+  renderAll();
+
+  // Step 2: Try Firebase
+  try {
+    const r = await fetch(FB, {cache:'no-cache'});
+    if (r.ok) {
+      const d = await r.json();
+      if (d && typeof d === 'object' && Array.isArray(d.embarcacoes) && d.embarcacoes.length > 0) {
+        // Firebase has data - use it
+        DB = d;
+        ensureArrays();
+        localStorage.setItem('ng_db', JSON.stringify(DB));
+        syncStatus('ok');
+        renderAll();
+      } else {
+        // Firebase empty or null - push our local data
+        syncStatus('ok');
+        if (DB.embarcacoes.length > 0 || DB.financeiro.length > 0) {
+          await saveCloud();
+        }
+      }
+    } else {
+      syncStatus('err');
+    }
+  } catch(e) {
+    console.log('Firebase offline:', e.message);
+    syncStatus('err');
+  }
+})();
+</script>
+</body>
+</html>
